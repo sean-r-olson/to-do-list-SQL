@@ -25,15 +25,36 @@ app.get ('/tasks', (req,res) => {
     .then((results) => {
         res.send(results.rows);
     }).catch((err) => {
-        console.log('error with GET', err);
+        console.log('error with SELECT', err);
         res.sendStatus(500);
     })
 })
 
-
-
-
 //setup POST:
+app.post( '/tasks', (req,res) => {
+    console.log( 'in /tasks POST', req.body);
+    const query = `INSERT INTO "tasks" ("tasks") VALUES ($1);`;
+    const values = [req.body.tasks];
+    pool.query(query, values)
+    .then((results) => {
+        res.sendStatus(201);
+    }).catch((err) => {
+        console.log('error with INSERT:', err);
+        res.sendStatus(500);
+    })
+})
 
 //setup PUT:
+app.put('/tasks/:id', (req,res)=>{
+    console.log('/tasks/:id:', req.params.id, req.body);
+    const query = `UPDATE "tasks" SET status=$1 WHERE id=$2;`;
+    const values = [req.body.newStatus, req.params.id];
+    pool.query(query,values)
+    .then((results) => {
+        res.sendStatus(200);
+    }).catch((err) => {
+        console.log('error with UPDATE:', err);
+        res.sendStatus(500);
+    })
+})
 

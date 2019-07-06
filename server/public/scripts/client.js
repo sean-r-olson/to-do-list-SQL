@@ -20,7 +20,7 @@ function getTasks () {
         for (let i=0; i<response.length; i++) {
             el.append( `
             <tr>
-            <td>${response[i].tasks}</td>
+            <td data-task="${response[i].tasks}">${response[i].tasks}</td>
             <td data-status ="${response[i].status}">${response[i].status}</td>
             <td><button class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
             </tr>
@@ -67,6 +67,7 @@ function completeTask () {
         console.log('error UPDATING:', err);
     })
 }
+
 
 
 

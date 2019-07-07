@@ -3,6 +3,5 @@ body {
   }
 
 .completeTask {
-    text-decoration: line-through;
-    text-decoration-color: red;
+    background-color: red;
 }

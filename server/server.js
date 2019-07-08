@@ -1,3 +1,4 @@
+//requires
 const express = require( 'express' );
 const app = express();
 const bodyParser = require( 'body-parser' );
@@ -15,9 +16,11 @@ app.listen( port, ()=>{
     console.log( 'server up on:', port );
 })
 
-//routes: 
+//routes: GET, POST, PUT, DELETE
 
-//setup GET:
+//setup GET route:
+//SELECT query
+//send rows of data
 app.get ('/tasks', (req,res) => {
     console.log( 'in /tasks GET:');
     const query = `SELECT * FROM "tasks";`;
@@ -30,7 +33,9 @@ app.get ('/tasks', (req,res) => {
     })
 })
 
-//setup POST:
+//setup POST route: 
+//INSERT INTO query
+//send 201 status
 app.post( '/tasks', (req,res) => {
     console.log( 'in /tasks POST', req.body);
     const query = `INSERT INTO "tasks" ("tasks") VALUES ($1);`;
@@ -44,7 +49,9 @@ app.post( '/tasks', (req,res) => {
     })
 })
 
-//setup PUT:
+//setup PUT route: 
+//UPDATE query
+//send 200 status
 app.put('/tasks/:id', (req,res)=>{
     console.log('/tasks/:id:', req.params.id, req.body);
     const query = `UPDATE "tasks" SET status=$1 WHERE id=$2;`;
@@ -58,8 +65,9 @@ app.put('/tasks/:id', (req,res)=>{
     })
 })
 
-//setup DELETE: 
-
+//setup DELETE route:
+//DELETE query
+//send 200 status
 app.delete( '/tasks/:id', ( req, res )=>{
     console.log( 'in /tasks DELETE:', req.params.id );
     const query = `DELETE FROM "tasks" WHERE id=$1;`;

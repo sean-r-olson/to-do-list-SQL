@@ -3,15 +3,17 @@ console.log('IN JS');
 $(document).ready(onReady);
 
 function onReady () {
+    //update DOM with 
     getTasks();
     $('#addTaskBtn').on('click', addTask);
     $('#taskListDiv').on('click', '.completeBtn', completeTask);
-    // $('#taskListDiv').on('click', '.completeBtn', crossOutTask);
     $('#taskListDiv' ).on( 'click', '.deleteBtn', deleteTask );
-    // $('#taskListDiv').on('click', '.completeBtn', crossOutTask);
 }
 
 //Setup GET request 
+//get data from server
+//loop through array
+//append data - add class for completed tasks
 function getTasks () {
     console.log('in getTasks');
     $.ajax({
@@ -21,30 +23,26 @@ function getTasks () {
         let el = $('#taskListDiv');
         el.empty();
         for (let i=0; i<response.length; i++) {
-            if (response[i].status === false) {
+            if (response[i].status === true) {
             el.append( `
-            <tr>
+            <tr class="completeTask">
             <td>${response[i].tasks}</td>
-            <td data-status="${response[i].status}">${response[i].status}</td>
-            <td><button class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
+            <td>${response[i].status}</td>
+            <td><button data-status="${response[i].status}" class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
             <td><button class="deleteBtn" data-id="${response[i].id}">Delete Task</button></td>
             </tr>
             `)
-        } else if (response[i].status === true) {
+        } else {
             el.append( `
-            <tr class="completedTask">
+            <tr>
             <td>${response[i].tasks}</td>
-            <td data-status="${response[i].status}">${response[i].status}</td>
-            <td><button class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
+            <td>${response[i].status}</td>
+            <td><button data-status="${response[i].status}" class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
             <td><button class="deleteBtn" data-id="${response[i].id}">Delete Task</button></td>
             </tr>
             `
             )
-            $('.completedTask').addClass('completeTask');
         } 
-            // if (response[i].status === true) {
-            //     $('.completedTask').closest('tbody').addClass('completeTask');
-            // }
         }
     // end for 
     }).catch(function(err){
@@ -53,6 +51,9 @@ function getTasks () {
 }
 
 //Setup POST request
+//add newly submitted data to DOM
+//send new object based on user inputs to server 
+//refresh DOM by running GET in .then 
 function addTask (event) {
     event.preventDefault();
     console.log('in addTask');
@@ -74,6 +75,8 @@ function addTask (event) {
 }
 
 //Setup PUT request
+//update status to 'true' for completed task
+//update DOM by running GET in .then
 function completeTask (event) {
     event.preventDefault();
     console.log('in completeTask');
@@ -95,6 +98,8 @@ function completeTask (event) {
 }
 
 //setup DELETE request:
+//remove a task (row) from DOM 
+//update DOM by running GET in .then
 function deleteTask(event){
     event.preventDefault();
     const id = $( this ).data( 'id' );
@@ -109,16 +114,6 @@ function deleteTask(event){
         alert( 'Error with Delete:', err );
     })
 }
-
-// function crossOutTask () {
-//     console.log('in crossOutTask');
-//     let status = $(this).data('status');
-//     if (status === true) {
-//         $(this).closest('tr').addClass('uncompletedTask');
-//     } else if (status === false) {
-//     $(this).closest('tr').addClass('completeTask');
-//     }
-// }
 
 
 

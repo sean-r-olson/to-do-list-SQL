@@ -94,7 +94,6 @@ function completeTask (event) {
     }).catch(function(err){
         console.log('error UPDATING:', err);
     })
-    
 }
 
 //setup DELETE request:
@@ -115,6 +114,6 @@ function deleteTask(event){
     })
 }
 
-
+a;sdljflasjfl;g
 
 

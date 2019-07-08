@@ -6,6 +6,7 @@ function onReady () {
     getTasks();
     $('#addTaskBtn').on('click', addTask);
     $('#taskListDiv').on('click', '.completeBtn', completeTask);
+    // $('#taskListDiv').on('click', '.completeBtn', crossOutTask);
     $('#taskListDiv' ).on( 'click', '.deleteBtn', deleteTask );
     // $('#taskListDiv').on('click', '.completeBtn', crossOutTask);
 }
@@ -20,6 +21,7 @@ function getTasks () {
         let el = $('#taskListDiv');
         el.empty();
         for (let i=0; i<response.length; i++) {
+            if (response[i].status === false) {
             el.append( `
             <tr>
             <td>${response[i].tasks}</td>
@@ -28,7 +30,23 @@ function getTasks () {
             <td><button class="deleteBtn" data-id="${response[i].id}">Delete Task</button></td>
             </tr>
             `)
-        } // end for loop
+        } else if (response[i].status === true) {
+            el.append( `
+            <tr class="completedTask">
+            <td>${response[i].tasks}</td>
+            <td data-status="${response[i].status}">${response[i].status}</td>
+            <td><button class="completeBtn" data-id="${response[i].id}">Complete Task</button></td>
+            <td><button class="deleteBtn" data-id="${response[i].id}">Delete Task</button></td>
+            </tr>
+            `
+            )
+            $('.completedTask').addClass('completeTask');
+        } 
+            // if (response[i].status === true) {
+            //     $('.completedTask').closest('tbody').addClass('completeTask');
+            // }
+        }
+    // end for 
     }).catch(function(err){
         alert('error getting tasks:', err);
     })
@@ -36,6 +54,7 @@ function getTasks () {
 
 //Setup POST request
 function addTask (event) {
+    event.preventDefault();
     console.log('in addTask');
     let objectToSend = {
         tasks: $('#addTaskIn').val()
@@ -55,8 +74,8 @@ function addTask (event) {
 }
 
 //Setup PUT request
-function completeTask () {
-    $(this).closest('tr').addClass('completeTask');
+function completeTask (event) {
+    event.preventDefault();
     console.log('in completeTask');
     const id = $(this).data('id');
     const status = $(this).data('status');
@@ -72,12 +91,14 @@ function completeTask () {
     }).catch(function(err){
         console.log('error UPDATING:', err);
     })
+    
 }
 
 //setup DELETE request:
-function deleteTask(){
+function deleteTask(event){
+    event.preventDefault();
     const id = $( this ).data( 'id' );
-    console.log( 'in sell:', id );
+    console.log( 'in deleteTask:', id );
     $.ajax({
         type: 'DELETE',
         url: `/tasks/${ id }`
@@ -90,8 +111,13 @@ function deleteTask(){
 }
 
 // function crossOutTask () {
-//     $(this).closest('tr').addClass('completeTask');
 //     console.log('in crossOutTask');
+//     let status = $(this).data('status');
+//     if (status === true) {
+//         $(this).closest('tr').addClass('uncompletedTask');
+//     } else if (status === false) {
+//     $(this).closest('tr').addClass('completeTask');
+//     }
 // }
 
 

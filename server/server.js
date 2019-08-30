@@ -23,7 +23,7 @@ app.listen( port, ()=>{
 //send rows of data
 app.get ('/tasks', (req,res) => {
     console.log( 'in /tasks GET:');
-    const query = `SELECT * FROM "tasks";`;
+    const query = `SELECT * FROM "tasks" ORDER BY id;`;
     pool.query(query)
     .then((results) => {
         res.send(results.rows);
